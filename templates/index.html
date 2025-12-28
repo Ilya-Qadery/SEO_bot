@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SEO Automation Console</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f7f6; margin: 0; }
+        .container { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 400px; }
+        h1 { font-size: 24px; color: #333; }
+        input[type="file"] { margin: 20px 0; }
+        button { background: #007bff; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        #status { margin-top: 20px; font-weight: bold; color: green; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SEO Bot Dashboard</h1>
+        <p>Select your Excel file to begin.</p>
+        <input type="file" id="excelFile" accept=".xlsx">
+        <button onclick="uploadAndStart()">Start Automation</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        async function uploadAndStart() {
+            const fileInput = document.getElementById('excelFile');
+            const status = document.getElementById('status');
+
+            if (fileInput.files.length === 0) {
+                alert("Please select a file first.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            status.innerText = "🚀 Bot triggered! You can check the terminal or articles folder for logs.";
+
+            try {
+                const response = await fetch('/start-bot', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                console.log(result);
+            } catch (error) {
+                status.innerText = "❌ Error starting bot.";
+            }
+        }
+    </script>
+</body>
+</html>
